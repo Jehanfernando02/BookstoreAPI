@@ -1,4 +1,5 @@
 com/bookstore/exception/CartNotFoundException.class
+com/bookstore/CorsFilter.class
 com/bookstore/resource/CartResource.class
 com/bookstore/JAXRSConfiguration.class
 com/bookstore/model/Order.class
@@ -11,7 +12,6 @@ com/bookstore/exception/BookNotFoundException.class
 com/bookstore/resource/CustomerResource.class
 com/bookstore/resource/RootResource.class
 com/bookstore/storage/InMemoryStorage.class
-com/bookstore/filter/CorsFilter.class
 com/bookstore/BookstoreApplication.class
 com/bookstore/exception/GenericExceptionMapper.class
 com/bookstore/model/Author.class

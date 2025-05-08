@@ -1,4 +1,4 @@
-package com.bookstore.filter;
+package com.bookstore;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
