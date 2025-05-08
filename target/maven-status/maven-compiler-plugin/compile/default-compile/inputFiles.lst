@@ -1,6 +1,7 @@
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/InvalidInputException.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/CustomerResource.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/JAXRSConfiguration.java
+/Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/Main.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Order.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/CartResource.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Customer.java

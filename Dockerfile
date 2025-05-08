@@ -1,11 +1,11 @@
-# Stage 1: Build the WAR file
-FROM maven:3.9.9-eclipse-temurin-17 AS builder
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
-COPY . .
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package
 
-# Stage 2: Deploy to Tomcat
-FROM tomcat:9.0-jdk17-temurin
-COPY --from=builder /app/target/BookstoreAPI.war /usr/local/tomcat/webapps/
+FROM openjdk:17-jre-slim
+WORKDIR /app
+COPY --from=build /app/target/BookstoreAPI.jar /app/BookstoreAPI.jar
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+CMD ["java", "-jar", "/app/BookstoreAPI.jar"]
