@@ -9,6 +9,7 @@ com/bookstore/exception/AuthorNotFoundException.class
 com/bookstore/exception/CustomerNotFoundException.class
 com/bookstore/model/Customer.class
 com/bookstore/exception/BookNotFoundException.class
+com/bookstore/SwaggerConfig.class
 com/bookstore/resource/CustomerResource.class
 com/bookstore/resource/RootResource.class
 com/bookstore/storage/InMemoryStorage.class

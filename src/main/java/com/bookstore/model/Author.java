@@ -1,29 +1,22 @@
 package com.bookstore.model;
 
-/**
- *
- * @author jehanfernando
- */
 public class Author {
-    
     private String id;
     private String firstName;
     private String lastName;
-    private String biography;
-    
 
+    // No-arg constructor
     public Author() {
-    
     }
 
-    public Author(String id, String firstName, String lastName, String biography) {
+    // Constructor with id, firstName, lastName
+    public Author(String id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.biography = biography;
     }
-    
 
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -47,14 +40,4 @@ public class Author {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public String getBiography() {
-        return biography;
-    }
-
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
-    
-    
 }

@@ -1,22 +1,17 @@
 package com.bookstore.model;
 
-/**
- *
- * @author jehanfernando
- */
 public class Customer {
-    
     private String id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
 
- 
+    // No-arg constructor
     public Customer() {
-        
     }
-    
+
+    // Constructor matching Main.java
     public Customer(String id, String firstName, String lastName, String email, String password) {
         this.id = id;
         this.firstName = firstName;
@@ -24,9 +19,8 @@ public class Customer {
         this.email = email;
         this.password = password;
     }
-    
-    // Adding getters & setters
 
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -66,6 +60,4 @@ public class Customer {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
 }

@@ -1,11 +1,6 @@
 package com.bookstore.model;
 
-/**
- *
- * @author jehanfernando
- */
 public class Book {
-    
     private String id;
     private String title;
     private String authorId;
@@ -13,13 +8,13 @@ public class Book {
     private int publicationYear;
     private double price;
     private int stock;
-    
-    
-    public Book(){
-        
+
+    // No-arg constructor
+    public Book() {
     }
-    
-    public Book(String id, String title, String authorId, String isbn, int publicationYear, double price, int stock){
+
+    // Constructor matching Main.java
+    public Book(String id, String title, String authorId, String isbn, int publicationYear, double price, int stock) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;
@@ -28,9 +23,8 @@ public class Book {
         this.price = price;
         this.stock = stock;
     }
-    
-    // Adding getters and setters
 
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -86,6 +80,4 @@ public class Book {
     public void setStock(int stock) {
         this.stock = stock;
     }
-    
-    
 }

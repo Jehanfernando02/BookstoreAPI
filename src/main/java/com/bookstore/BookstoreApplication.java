@@ -11,7 +11,6 @@ import java.util.Set;
 public class BookstoreApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
-        // Register all JAX-RS resource and provider classes for the application
         Set<Class<?>> classes = new HashSet<>();
         classes.add(RootResource.class);
         classes.add(BookResource.class);
@@ -20,6 +19,7 @@ public class BookstoreApplication extends Application {
         classes.add(CartResource.class);
         classes.add(OrderResource.class);
         classes.add(GenericExceptionMapper.class);
+        classes.add(CorsFilter.class);
         return classes;
     }
 }

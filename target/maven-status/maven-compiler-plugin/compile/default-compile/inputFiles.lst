@@ -9,7 +9,7 @@
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Cart.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/CartNotFoundException.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/CustomerNotFoundException.java
-/Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/filter/CorsFilter.java
+/Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/CorsFilter.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/OrderResource.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/RootResource.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/AuthorResource.java
@@ -19,5 +19,6 @@
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/AuthorNotFoundException.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/BookstoreApplication.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/BookNotFoundException.java
+/Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/SwaggerConfig.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Book.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/BookResource.java

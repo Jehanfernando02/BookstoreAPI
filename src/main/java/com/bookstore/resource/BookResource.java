@@ -3,6 +3,8 @@ package com.bookstore.resource;
 import com.bookstore.model.Book;
 import com.bookstore.storage.InMemoryStorage;
 import com.bookstore.exception.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,11 +19,13 @@ public class BookResource {
     private static final Logger LOGGER = Logger.getLogger(BookResource.class.getName());
 
     @POST
+    @Operation(summary = "Create a new book", description = "Adds a new book to the bookstore")
+    @ApiResponse(responseCode = "201", description = "Book created")
+    @ApiResponse(responseCode = "400", description = "Invalid input")
     public Response createBook(Book book) {
         LOGGER.info("Creating book: " + book.getTitle());
         validateBook(book);
 
-        // Auto-generate ID if not provided
         if (book.getId() == null || book.getId().isEmpty()) {
             book.setId(InMemoryStorage.generateId("book"));
         }
@@ -31,6 +35,8 @@ public class BookResource {
     }
 
     @GET
+    @Operation(summary = "Get all books", description = "Retrieves a list of all books")
+    @ApiResponse(responseCode = "200", description = "List of books")
     public List<Book> getAllBooks() {
         LOGGER.info("Fetching all books");
         return new ArrayList<>(InMemoryStorage.getBooks().values());
@@ -38,6 +44,9 @@ public class BookResource {
 
     @GET
     @Path("/{id}")
+    @Operation(summary = "Get a book by ID", description = "Retrieves a book by its ID")
+    @ApiResponse(responseCode = "200", description = "Book found")
+    @ApiResponse(responseCode = "404", description = "Book not found")
     public Book getBook(@PathParam("id") String id) {
         LOGGER.info("Fetching book with ID: " + id);
         Book book = InMemoryStorage.getBooks().get(id);
@@ -49,6 +58,9 @@ public class BookResource {
 
     @PUT
     @Path("/{id}")
+    @Operation(summary = "Update a book", description = "Updates an existing book by ID")
+    @ApiResponse(responseCode = "200", description = "Book updated")
+    @ApiResponse(responseCode = "404", description = "Book not found")
     public Book updateBook(@PathParam("id") String id, Book book) {
         LOGGER.info("Updating book with ID: " + id);
         if (!InMemoryStorage.getBooks().containsKey(id)) {
@@ -62,6 +74,9 @@ public class BookResource {
 
     @DELETE
     @Path("/{id}")
+    @Operation(summary = "Delete a book", description = "Deletes a book by ID")
+    @ApiResponse(responseCode = "204", description = "Book deleted")
+    @ApiResponse(responseCode = "404", description = "Book not found")
     public Response deleteBook(@PathParam("id") String id) {
         LOGGER.info("Deleting book with ID: " + id);
         if (!InMemoryStorage.getBooks().containsKey(id)) {
@@ -72,7 +87,6 @@ public class BookResource {
     }
 
     private void validateBook(Book book) {
-        // Validate all required fields and business rules
         if (book.getTitle() == null || book.getTitle().isEmpty()) {
             throw new InvalidInputException("Book title is required.");
         }
