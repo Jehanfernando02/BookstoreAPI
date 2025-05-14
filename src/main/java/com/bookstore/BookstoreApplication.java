@@ -12,12 +12,10 @@ public class BookstoreApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
-        classes.add(RootResource.class);
         classes.add(BookResource.class);
         classes.add(AuthorResource.class);
         classes.add(CustomerResource.class);
         classes.add(CartResource.class);
-        classes.add(OrderResource.class);
         classes.add(GenericExceptionMapper.class);
         classes.add(CorsFilter.class);
         return classes;

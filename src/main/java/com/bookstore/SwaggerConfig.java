@@ -8,9 +8,9 @@ import io.swagger.v3.oas.annotations.servers.Server;
     info = @Info(
         title = "Bookstore API",
         version = "1.0",
-        description = "REST API for managing a bookstore"
+        description = "API for managing bookstore data"
     ),
-    servers = @Server(url = "/api")
+    servers = @Server(url = "https://bookstoreapi-c176.onrender.com/api")
 )
 public class SwaggerConfig {
 }
