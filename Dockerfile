@@ -7,6 +7,11 @@ RUN ls -l /app/target/ && test -f /app/target/bookstore-1.0.war || (echo "WAR fi
 FROM openjdk:11-jre-slim
 WORKDIR /app
 COPY --from=build /app/target/bookstore-1.0.war /app/bookstore-1.0.war
+# Unpack the WAR to access Main.class and dependencies
+RUN mkdir /app/webapp && \
+    unzip /app/bookstore-1.0.war -d /app/webapp && \
+    rm /app/bookstore-1.0.war
 EXPOSE 8080
 ENV INIT_SAMPLE_DATA=true
-CMD ["java", "-jar", "/app/bookstore-1.0.war"]
+# Run Main class with classpath including WEB-INF/lib
+CMD ["java", "-cp", "webapp/WEB-INF/classes:webapp/WEB-INF/lib/*", "com.bookstore.Main"]
