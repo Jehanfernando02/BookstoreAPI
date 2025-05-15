@@ -5,6 +5,7 @@ import com.bookstore.storage.InMemoryStorage;
 import com.bookstore.exception.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,11 +26,10 @@ public class BookResource {
     public Response createBook(Book book) {
         LOGGER.info("Creating book: " + book.getTitle());
         validateBook(book);
-
+        checkUniqueIsbn(book.getIsbn(), null);
         if (book.getId() == null || book.getId().isEmpty()) {
             book.setId(InMemoryStorage.generateId("book"));
         }
-
         InMemoryStorage.getBooks().put(book.getId(), book);
         return Response.status(Response.Status.CREATED).entity(book).build();
     }
@@ -67,6 +67,7 @@ public class BookResource {
             throw new BookNotFoundException("Book with ID " + id + " does not exist.");
         }
         validateBook(book);
+        checkUniqueIsbn(book.getIsbn(), id);
         book.setId(id);
         InMemoryStorage.getBooks().put(id, book);
         return book;
@@ -96,6 +97,9 @@ public class BookResource {
         if (book.getIsbn() == null || book.getIsbn().isEmpty()) {
             throw new InvalidInputException("ISBN is required.");
         }
+        if (!book.getIsbn().matches("^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$)[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$")) {
+            throw new InvalidInputException("Invalid ISBN format.");
+        }
         if (book.getPublicationYear() > 2025) {
             throw new InvalidInputException("Publication year must not exceed the system's current year (2025).");
         }
@@ -104,6 +108,14 @@ public class BookResource {
         }
         if (book.getStock() < 0) {
             throw new InvalidInputException("Stock cannot be negative.");
+        }
+    }
+
+    private void checkUniqueIsbn(String isbn, String excludeId) {
+        for (Book existing : InMemoryStorage.getBooks().values()) {
+            if (existing.getIsbn().equals(isbn) && (excludeId == null || !existing.getId().equals(excludeId))) {
+                throw new InvalidInputException("ISBN " + isbn + " is already in use.");
+            }
         }
     }
 }

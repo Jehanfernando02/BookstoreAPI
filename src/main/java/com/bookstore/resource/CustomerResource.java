@@ -20,6 +20,7 @@ public class CustomerResource {
     public Response createCustomer(Customer customer) {
         LOGGER.info("Creating customer: " + customer.getEmail());
         validateCustomer(customer);
+        checkUniqueEmail(customer.getEmail(), null);
         if (customer.getId() == null || customer.getId().isEmpty()) {
             customer.setId(InMemoryStorage.generateId("customer"));
         }
@@ -52,6 +53,7 @@ public class CustomerResource {
             throw new CustomerNotFoundException("Customer with ID " + id + " does not exist.");
         }
         validateCustomer(customer);
+        checkUniqueEmail(customer.getEmail(), id);
         customer.setId(id);
         InMemoryStorage.getCustomers().put(id, customer);
         return customer;
@@ -80,6 +82,14 @@ public class CustomerResource {
         }
         if (customer.getPassword() == null || customer.getPassword().length() < 8) {
             throw new InvalidInputException("Password must be at least 8 characters long.");
+        }
+    }
+
+    private void checkUniqueEmail(String email, String excludeId) {
+        for (Customer existing : InMemoryStorage.getCustomers().values()) {
+            if (existing.getEmail().equalsIgnoreCase(email) && (excludeId == null || !existing.getId().equals(excludeId))) {
+                throw new InvalidInputException("Email " + email + " is already in use.");
+            }
         }
     }
 }

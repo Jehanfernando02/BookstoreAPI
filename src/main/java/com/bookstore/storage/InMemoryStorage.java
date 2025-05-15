@@ -8,10 +8,8 @@ import com.bookstore.model.Order;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * In-memory storage for bookstore entities with synchronized sequential ID generation.
- */
 public class InMemoryStorage {
 
     private static final Map<String, Book> books = new ConcurrentHashMap<>();
@@ -20,11 +18,11 @@ public class InMemoryStorage {
     private static final Map<String, Cart> carts = new ConcurrentHashMap<>();
     private static final Map<String, Order> orders = new ConcurrentHashMap<>();
 
-    private static long authorCounter = 0;
-    private static long bookCounter = 0;
-    private static long customerCounter = 0;
-    private static long cartCounter = 0;
-    private static long orderCounter = 0;
+    private static final AtomicLong authorCounter = new AtomicLong(0);
+    private static final AtomicLong bookCounter = new AtomicLong(0);
+    private static final AtomicLong customerCounter = new AtomicLong(0);
+    private static final AtomicLong cartCounter = new AtomicLong(0);
+    private static final AtomicLong orderCounter = new AtomicLong(0);
 
     public static Map<String, Book> getBooks() {
         return books;
@@ -46,41 +44,20 @@ public class InMemoryStorage {
         return orders;
     }
 
-    public static synchronized String generateId(String entityType) {
-        
-        // Generate a unique ID for the given entity type
+    public static String generateId(String entityType) {
         switch (entityType.toLowerCase()) {
             case "author":
-                authorCounter = recalculateCounter(authors, "author");
-                return "author" + (++authorCounter);
+                return "author" + authorCounter.incrementAndGet();
             case "book":
-                bookCounter = recalculateCounter(books, "book");
-                return "book" + (++bookCounter);
+                return "book" + bookCounter.incrementAndGet();
             case "customer":
-                customerCounter = recalculateCounter(customers, "customer");
-                return "customer" + (++customerCounter);
+                return "customer" + customerCounter.incrementAndGet();
             case "cart":
-                cartCounter = recalculateCounter(carts, "cart");
-                return "cart" + (++cartCounter);
+                return "cart" + cartCounter.incrementAndGet();
             case "order":
-                orderCounter = recalculateCounter(orders, "order");
-                return "order" + (++orderCounter);
+                return "order" + orderCounter.incrementAndGet();
             default:
                 throw new IllegalArgumentException("Unknown entity type: " + entityType);
         }
-    }
-
-    // Generic counter recalculation based on existing map keys
-    private static long recalculateCounter(Map<String, ?> map, String prefix) {
-        // Recalculate the counter based on the highest existing ID
-        if (map.isEmpty()) {
-            return 0;
-        }
-        return map.keySet().stream()
-                .map(id -> id.replace(prefix, ""))
-                .filter(num -> num.matches("\\d+"))
-                .mapToLong(Long::parseLong)
-                .max()
-                .orElse(0);
     }
 }

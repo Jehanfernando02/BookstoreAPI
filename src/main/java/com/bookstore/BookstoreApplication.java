@@ -1,7 +1,6 @@
 package com.bookstore;
 
 import org.glassfish.jersey.server.ResourceConfig;
-
 import com.bookstore.exception.GenericExceptionMapper;
 
 import javax.ws.rs.ApplicationPath;
