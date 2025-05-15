@@ -20,5 +20,4 @@ com/bookstore/exception/InvalidInputException.class
 com/bookstore/resource/BookResource.class
 com/bookstore/Main.class
 com/bookstore/model/Cart.class
-com/bookstore/resource/OrderResource.class
 com/bookstore/model/Book.class
