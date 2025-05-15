@@ -11,7 +11,8 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        Server server = new Server(8080);
+        String port = System.getenv("PORT") != null ? System.getenv("PORT") : "8080";
+        Server server = new Server(Integer.parseInt(port));
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
@@ -24,8 +25,8 @@ public class Main {
 
         try {
             server.start();
-            logger.info("Bookstore API running at http://localhost:8080/api");
-            server.join(); // Blocks until server is stopped
+            logger.info("Bookstore API running at http://0.0.0.0:{}", port);
+            server.join();
         } catch (Exception e) {
             logger.error("Failed to start Jetty server", e);
             throw new RuntimeException("Server startup failed", e);

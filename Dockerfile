@@ -1,18 +1,15 @@
-# Use a base image with Java 8
-FROM openjdk:8-jdk-alpine
-
-# Set working directory
+# Stage 1: Build the JAR with Maven
+FROM maven:3.8.6-openjdk-8 AS builder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the Maven-built JAR file
-COPY target/bookstore-1.0.jar app.jar
-
-# Expose port 8080 (or PORT environment variable)
+# Stage 2: Create the runtime image
+FROM openjdk:8-jdk-alpine
+WORKDIR /app
+COPY --from=builder /app/target/bookstore-1.0.jar app.jar
 EXPOSE 8080
-
-# Set environment variables for memory and port
 ENV JAVA_OPTS="-Xms512m -Xmx512m"
 ENV PORT=8080
-
-# Run the JAR file
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
