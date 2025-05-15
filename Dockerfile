@@ -1,5 +1,5 @@
 # Stage 1: Build the JAR with Maven
-FROM maven:3.8.6-eclipse-temurin-8 AS builder
+FROM maven:3.8.6-openjdk-8 AS builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
@@ -11,4 +11,5 @@ WORKDIR /app
 COPY --from=builder /app/target/bookstore-1.0.jar app.jar
 EXPOSE 8080
 ENV JAVA_OPTS="-Xms512m -Xmx512m"
-ENTRYPOINT java $JAVA_OPTS -jar app.jar
+ENV PORT=8080
+ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
