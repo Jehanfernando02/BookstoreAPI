@@ -1,12 +1,18 @@
-# Build stage
-FROM maven:3.8.6-openjdk-8 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+# Use a base image with Java 8
+FROM openjdk:8-jdk-alpine
 
-# Run stage
-FROM openjdk:8-jre-slim
+# Set working directory
 WORKDIR /app
-COPY --from=build /app/target/BookstoreAPI.jar app.jar
+
+# Copy the Maven-built JAR file
+COPY target/bookstore-1.0.jar app.jar
+
+# Expose port 8080 (or PORT environment variable)
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+
+# Set environment variables for memory and port
+ENV JAVA_OPTS="-Xms512m -Xmx512m"
+ENV PORT=8080
+
+# Run the JAR file
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
