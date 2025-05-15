@@ -17,6 +17,7 @@ com/bookstore/storage/InMemoryStorage.class
 com/bookstore/BookstoreApplication.class
 com/bookstore/exception/GenericExceptionMapper.class
 com/bookstore/model/Author.class
+com/bookstore/AppConfig.class
 com/bookstore/exception/InvalidInputException.class
 com/bookstore/resource/BookResource.class
 com/bookstore/Main.class

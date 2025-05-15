@@ -17,29 +17,30 @@ public class Main {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
 
-        ServletHolder servletHolder = new ServletHolder(new ServletContainer());
-        servletHolder.setInitParameter("javax.ws.rs.Application", BookstoreApplication.class.getName());
+        // Link to your AppConfig (ResourceConfig subclass)
+        ServletHolder servletHolder = new ServletHolder(new ServletContainer(new AppConfig()));
+        servletHolder.setInitOrder(0); // initialize on startup
         context.addServlet(servletHolder, "/api/*");
 
         server.setHandler(context);
 
         try {
             server.start();
-            logger.info("Bookstore API running at http://0.0.0.0:{}", port);
+            logger.info("📚 Bookstore API running at http://0.0.0.0:{}", port);
             server.join();
         } catch (Exception e) {
-            logger.error("Failed to start Jetty server", e);
+            logger.error("❌ Failed to start Jetty server", e);
             throw new RuntimeException("Server startup failed", e);
         } finally {
             try {
                 if (server.isStarted() || server.isStarting()) {
-                    logger.info("Stopping Jetty server");
+                    logger.info("🛑 Stopping Jetty server");
                     server.stop();
                 }
-                logger.info("Destroying Jetty server");
+                logger.info("🧹 Destroying Jetty server");
                 server.destroy();
             } catch (Exception e) {
-                logger.error("Error during server shutdown", e);
+                logger.error("⚠️ Error during server shutdown", e);
             }
         }
     }

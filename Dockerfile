@@ -8,8 +8,8 @@ RUN mvn clean package -DskipTests
 # Stage 2: Create the runtime image
 FROM openjdk:8-jdk-alpine
 WORKDIR /app
-COPY --from=builder /app/target/bookstore-1.0.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8080
 ENV JAVA_OPTS="-Xms512m -Xmx512m"
 ENV PORT=8080
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
