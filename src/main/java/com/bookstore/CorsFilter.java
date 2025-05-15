@@ -8,9 +8,11 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
+    private static final Logger LOGGER = Logger.getLogger(CorsFilter.class.getName());
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
         "https://libro-nest.vercel.app",
         "http://localhost:3000"
@@ -19,24 +21,33 @@ public class CorsFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-        String origin = requestContext.getHeaderString("Origin");
+        try {
+            MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+            String origin = requestContext.getHeaderString("Origin");
+            LOGGER.info("Processing CORS for Origin: " + (origin != null ? origin : "null"));
 
-        // Set CORS headers for allowed origins
-        if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
-            headers.add("Access-Control-Allow-Origin", origin);
-        } else {
-            headers.add("Access-Control-Allow-Origin", "https://libro-nest.vercel.app");
-        }
+            // Set CORS headers
+            if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
+                headers.add("Access-Control-Allow-Origin", origin);
+                LOGGER.info("Allowed origin: " + origin);
+            } else {
+                headers.add("Access-Control-Allow-Origin", "https://libro-nest.vercel.app");
+                LOGGER.info("Default origin set: https://libro-nest.vercel.app");
+            }
 
-        headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-        headers.add("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
-        headers.add("Access-Control-Allow-Credentials", "true");
-        headers.add("Access-Control-Max-Age", "86400");
+            headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+            headers.add("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
+            headers.add("Access-Control-Allow-Credentials", "true");
+            headers.add("Access-Control-Max-Age", "86400");
 
-        // Handle preflight OPTIONS requests
-        if (requestContext.getMethod().equalsIgnoreCase("OPTIONS")) {
-            responseContext.setStatus(200); // OK for preflight
+            // Handle OPTIONS preflight requests
+            if ("OPTIONS".equalsIgnoreCase(requestContext.getMethod())) {
+                responseContext.setStatus(200);
+                LOGGER.info("Handled OPTIONS request");
+            }
+        } catch (Exception e) {
+            LOGGER.severe("CORS filter error: " + e.getMessage());
+            throw new IOException("CORS filter failed", e);
         }
     }
 }
