@@ -1,3 +1,4 @@
+com/bookstore/resource/CorsTestResource.class
 com/bookstore/BookstoreApplication$HealthResource.class
 com/bookstore/exception/CartNotFoundException.class
 com/bookstore/CorsFilter.class

@@ -15,8 +15,9 @@ import java.util.logging.Logger;
 @Provider
 @Priority(Priorities.HEADER_DECORATOR)
 public class CorsFilter implements ContainerResponseFilter {
-
     private static final Logger LOGGER = Logger.getLogger(CorsFilter.class.getName());
+    
+    // Add proper generic type parameter
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
         "https://libro-nest.vercel.app",
         "http://localhost:3000"
@@ -25,26 +26,31 @@ public class CorsFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-
+        
+        // Add proper generic type parameter
         MultivaluedMap<String, Object> headers = responseContext.getHeaders();
         String origin = requestContext.getHeaderString("Origin");
-
+        
         LOGGER.info("Processing CORS for Origin: " + (origin != null ? origin : "null"));
-
+        
+        // Always add CORS headers for preflight requests
         if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
             headers.putSingle("Access-Control-Allow-Origin", origin);
             LOGGER.info("Allowed origin: " + origin);
         } else {
+            // Be careful with wildcard origins in production
+            // headers.putSingle("Access-Control-Allow-Origin", "*");
+            // For specific origins only:
             headers.putSingle("Access-Control-Allow-Origin", "https://libro-nest.vercel.app");
             LOGGER.info("Fallback origin set: https://libro-nest.vercel.app");
         }
-
+        
         headers.putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         headers.putSingle("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
         headers.putSingle("Access-Control-Allow-Credentials", "true");
         headers.putSingle("Access-Control-Max-Age", "86400");
-
-        // OPTIONS preflight requests do not require body
+        
+        // OPTIONS preflight requests should return 200 OK
         if ("OPTIONS".equalsIgnoreCase(requestContext.getMethod())) {
             responseContext.setStatus(200);
             LOGGER.info("OPTIONS preflight request processed");

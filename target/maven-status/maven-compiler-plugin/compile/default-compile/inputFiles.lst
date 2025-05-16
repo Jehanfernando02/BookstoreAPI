@@ -14,6 +14,7 @@
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/Main.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Order.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Customer.java
+/Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/resource/CorsTestResource.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/model/Cart.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/CartNotFoundException.java
 /Users/jehanfernando/Desktop/Projects/BookstoreAPI/src/main/java/com/bookstore/exception/CustomerNotFoundException.java
