@@ -7,9 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @Path("/customers")
@@ -70,27 +68,6 @@ public class CustomerResource {
         }
         InMemoryStorage.getCustomers().remove(id);
         return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
-    @POST
-    @Path("/login")
-    public Response login(Map<String, String> credentials) {
-        LOGGER.info("Attempting login for email: " + credentials.get("email"));
-        String email = credentials.get("email");
-        String password = credentials.get("password");
-        if (email == null || password == null) {
-            throw new InvalidInputException("Email and password are required.");
-        }
-        for (Customer customer : InMemoryStorage.getCustomers().values()) {
-            if (customer.getEmail().equalsIgnoreCase(email) && customer.getPassword().equals(password)) {
-                Map<String, String> response = new HashMap<>();
-                response.put("id", customer.getId());
-                response.put("email", customer.getEmail());
-                response.put("firstName", customer.getFirstName());
-                return Response.ok(response).build();
-            }
-        }
-        throw new InvalidInputException("Invalid email or password.");
     }
 
     private void validateCustomer(Customer customer) {

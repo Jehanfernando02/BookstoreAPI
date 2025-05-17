@@ -17,12 +17,24 @@ public class CartResource {
     private static final Logger LOGGER = Logger.getLogger(CartResource.class.getName());
 
     @POST
+    public Response createCart(@PathParam("customerId") String customerId) {
+        LOGGER.info("Creating cart for customer: " + customerId);
+        validateCustomer(customerId);
+        if (InMemoryStorage.getCarts().containsKey(customerId)) {
+            throw new InvalidInputException("Cart already exists for customer ID " + customerId);
+        }
+        Cart cart = new Cart(customerId);
+        cart.setId(InMemoryStorage.generateId("cart"));
+        InMemoryStorage.getCarts().put(customerId, cart);
+        return Response.status(Response.Status.CREATED).entity(cart).build();
+    }
+
+    @POST
     @Path("/items")
     public Response addItemToCart(@PathParam("customerId") String customerId, Map<String, Object> item) {
         LOGGER.info("Adding item to cart for customer: " + customerId);
         validateCustomer(customerId);
 
-        // Extract and validate bookId and quantity from the input map
         Object bookIdObj = item.get("bookId");
         Object quantityObj = item.get("quantity");
         if (bookIdObj == null || !(bookIdObj instanceof String) || quantityObj == null || !(quantityObj instanceof Integer)) {
@@ -43,12 +55,12 @@ public class CartResource {
             throw new OutOfStockException("Insufficient stock for book ID " + bookId);
         }
 
-        // Create a new cart if none exists for the customer
-        Cart cart = InMemoryStorage.getCarts().computeIfAbsent(customerId, k -> {
-            Cart newCart = new Cart(customerId);
-            newCart.setId(InMemoryStorage.generateId("cart"));
-            return newCart;
-        });
+        Cart cart = InMemoryStorage.getCarts().get(customerId);
+        if (cart == null) {
+            cart = new Cart(customerId);
+            cart.setId(InMemoryStorage.generateId("cart"));
+            InMemoryStorage.getCarts().put(customerId, cart);
+        }
         cart.getItems().put(bookId, cart.getItems().getOrDefault(bookId, 0) + quantity);
         book.setStock(book.getStock() - quantity);
         return Response.status(Response.Status.CREATED).entity(cart).build();
@@ -91,7 +103,6 @@ public class CartResource {
             throw new BookNotFoundException("Book with ID " + bookId + " does not exist.");
         }
 
-        // Adjust stock based on the difference between new and current quantities
         int currentQuantity = cart.getItems().getOrDefault(bookId, 0);
         int stockAdjustment = quantity - currentQuantity;
         if (book.getStock() < stockAdjustment) {

@@ -18,13 +18,15 @@ public class CorsFilter implements ContainerResponseFilter {
     private static final Logger LOGGER = Logger.getLogger(CorsFilter.class.getName());
     
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
+        "https://libro-nest.vercel.app",
         "http://localhost:3000",
-        "https://your-production-url.vercel.app" // Replace with your actual production URL
+        "http://localhost:5173" // Added for Vite dev server
     );
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
+        
         MultivaluedMap<String, Object> headers = responseContext.getHeaders();
         String origin = requestContext.getHeaderString("Origin");
         
@@ -34,11 +36,12 @@ public class CorsFilter implements ContainerResponseFilter {
             headers.putSingle("Access-Control-Allow-Origin", origin);
             LOGGER.info("Allowed origin: " + origin);
         } else {
-            headers.putSingle("Access-Control-Allow-Origin", "http://localhost:3000"); // Default for dev
+            headers.putSingle("Access-Control-Allow-Origin", "https://libro-nest.vercel.app");
+            LOGGER.info("Fallback origin set: https://libro-nest.vercel.app");
         }
         
-        headers.putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        headers.putSingle("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
+        headers.putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        headers.putSingle("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, X-Requested-With");
         headers.putSingle("Access-Control-Allow-Credentials", "true");
         headers.putSingle("Access-Control-Max-Age", "86400");
         
