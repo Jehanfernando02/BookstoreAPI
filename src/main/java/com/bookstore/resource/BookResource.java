@@ -24,14 +24,20 @@ public class BookResource {
     @ApiResponse(responseCode = "201", description = "Book created")
     @ApiResponse(responseCode = "400", description = "Invalid input")
     public Response createBook(Book book) {
-        LOGGER.info("Creating book: " + book.getTitle());
-        validateBook(book);
-        checkUniqueIsbn(book.getIsbn(), null);
-        if (book.getId() == null || book.getId().isEmpty()) {
-            book.setId(InMemoryStorage.generateId("book"));
+        LOGGER.info("Creating book: " + (book.getTitle() != null ? book.getTitle() : "null"));
+        try {
+            validateBook(book);
+            checkUniqueIsbn(book.getIsbn(), null);
+            if (book.getId() == null || book.getId().isEmpty()) {
+                book.setId(InMemoryStorage.generateId("book"));
+            }
+            InMemoryStorage.getBooks().put(book.getId(), book);
+            LOGGER.info("Book created successfully: " + book.getId());
+            return Response.status(Response.Status.CREATED).entity(book).build();
+        } catch (Exception e) {
+            LOGGER.severe("Error creating book: " + e.getMessage());
+            throw e;
         }
-        InMemoryStorage.getBooks().put(book.getId(), book);
-        return Response.status(Response.Status.CREATED).entity(book).build();
     }
 
     @GET
